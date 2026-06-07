@@ -1,0 +1,48 @@
+import { getSales } from "@/lib/actions/sales";
+import { createClient } from "@/lib/supabase/server";
+import { SalesTable } from "@/components/sales/SalesTable";
+import { SalesFilters } from "@/components/sales/SalesFilters";
+import Link from "next/link";
+import { ShoppingCart } from "lucide-react";
+
+interface PageProps {
+  searchParams: Promise<{ search?: string; status?: string; payment_method?: string; page?: string; date_from?: string; date_to?: string }>;
+}
+
+export default async function SalesPage({ searchParams }: PageProps) {
+  const sp   = await searchParams;
+  const page = parseInt(sp.page ?? "1");
+
+  const filters = {
+    search: sp.search, status: sp.status as any,
+    payment_method: sp.payment_method as any,
+    date_from: sp.date_from, date_to: sp.date_to,
+  };
+
+  const { data, total, total_pages } = await getSales(filters, page, 20);
+
+  const supabase = await createClient();
+  const { data: profile } = await supabase.from("user_profiles").select("businesses(currency)").single() as any;
+  const currency = profile?.businesses?.currency ?? "USD";
+
+  return (
+    <div className="max-w-7xl mx-auto space-y-5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h2 className="text-xl font-bold text-foreground" style={{ fontFamily: "Bricolage Grotesque, sans-serif" }}>
+            Sales
+          </h2>
+          <p className="text-sm text-muted-foreground mt-0.5">{total} transaction{total !== 1 ? "s" : ""}</p>
+        </div>
+        <Link href="/dashboard/pos"
+          className="flex items-center gap-2 px-4 py-2.5 text-sm bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl font-semibold transition-all">
+          <ShoppingCart size={15} /> New Sale
+        </Link>
+      </div>
+
+      <SalesFilters />
+
+      <SalesTable data={data as any} total={total} page={page} totalPages={total_pages} currency={currency} />
+    </div>
+  );
+}
