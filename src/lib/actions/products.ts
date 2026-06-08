@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
-import { productSchema, ProductFormData } from "@/lib/validations";
+import { productSchema } from "@/lib/validations";
 import { ApiResponse, Product, PaginatedResponse, ProductFilters } from "@/types";
 import { createNotification } from "./notifications";
 
@@ -56,8 +56,7 @@ export async function createProduct(formData: FormData): Promise<ApiResponse<Pro
   const { data: profile } = await supabase.from("user_profiles").select("business_id").single();
   if (!profile) return { data: null, error: "Not authenticated", success: false };
 
-  const { data, error } = await supabase
-    .from("products")
+  const { data, error } = await (supabase.from("products") as any)
     .insert({ ...parsed.data, business_id: (profile as any).business_id })
     .select("*, categories(id, name)")
     .single();
@@ -76,7 +75,6 @@ export async function createProduct(formData: FormData): Promise<ApiResponse<Pro
     });
   }
 
-  // Notify if created with low stock
   if (parsed.data.quantity <= parsed.data.low_stock_threshold && parsed.data.quantity > 0) {
     await createNotification({
       business_id: (profile as any).business_id,
@@ -100,8 +98,7 @@ export async function updateProduct(id: string, formData: FormData): Promise<Api
   if (!parsed.success) return { data: null, error: parsed.error.errors[0].message, success: false };
 
   const supabase = await createClient();
-  const { data, error } = await supabase
-    .from("products")
+  const { data, error } = await (supabase.from("products") as any)
     .update({ ...parsed.data, updated_at: new Date().toISOString() })
     .eq("id", id)
     .select("*, categories(id, name)")
@@ -148,14 +145,13 @@ export async function adjustStock(
   const businessId = (profile as any).business_id as string;
 
   let newQty = currentQty;
-  if (type === "in")         newQty = currentQty + quantity;
-  else if (type === "out")   newQty = Math.max(0, currentQty - quantity);
-  else                       newQty = quantity;
+  if (type === "in")       newQty = currentQty + quantity;
+  else if (type === "out") newQty = Math.max(0, currentQty - quantity);
+  else                     newQty = quantity;
 
   const { error: updateError } = await (supabase.from("products") as any)
     .update({ quantity: newQty, updated_at: new Date().toISOString() })
     .eq("id", productId);
-
   if (updateError) return { data: null, error: updateError.message, success: false };
 
   await (supabase.from("stock_movements") as any).insert({
@@ -167,7 +163,6 @@ export async function adjustStock(
     created_by:  user.user.id,
   });
 
-  // Fire low stock notification if threshold crossed
   if (newQty <= threshold && currentQty > threshold) {
     await createNotification({
       business_id: businessId,
@@ -178,7 +173,6 @@ export async function adjustStock(
     });
   }
 
-  // Fire out-of-stock notification
   if (newQty === 0 && currentQty > 0) {
     await createNotification({
       business_id: businessId,

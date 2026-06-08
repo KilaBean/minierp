@@ -18,7 +18,10 @@ export async function getCategories(): Promise<Category[]> {
 export async function createCategory(
   formData: FormData
 ): Promise<ApiResponse<Category>> {
-  const raw = { name: formData.get("name") as string, description: formData.get("description") as string };
+  const raw = {
+    name:        formData.get("name")        as string,
+    description: formData.get("description") as string,
+  };
   const parsed = categorySchema.safeParse(raw);
   if (!parsed.success)
     return { data: null, error: parsed.error.errors[0].message, success: false };
@@ -28,10 +31,10 @@ export async function createCategory(
     .from("user_profiles").select("business_id").single();
   if (!profile) return { data: null, error: "Not authenticated", success: false };
 
-  const { data, error } = await supabase
-    .from("categories")
-    .insert({ ...parsed.data, business_id: profile.business_id })
-    .select().single();
+  const { data, error } = await (supabase.from("categories") as any)
+    .insert({ ...parsed.data, business_id: (profile as any).business_id })
+    .select()
+    .single();
 
   if (error) return { data: null, error: error.message, success: false };
   revalidatePath("/dashboard/inventory");
@@ -42,17 +45,20 @@ export async function updateCategory(
   id: string,
   formData: FormData
 ): Promise<ApiResponse<Category>> {
-  const raw = { name: formData.get("name") as string, description: formData.get("description") as string };
+  const raw = {
+    name:        formData.get("name")        as string,
+    description: formData.get("description") as string,
+  };
   const parsed = categorySchema.safeParse(raw);
   if (!parsed.success)
     return { data: null, error: parsed.error.errors[0].message, success: false };
 
   const supabase = await createClient();
-  const { data, error } = await supabase
-    .from("categories")
+  const { data, error } = await (supabase.from("categories") as any)
     .update(parsed.data)
     .eq("id", id)
-    .select().single();
+    .select()
+    .single();
 
   if (error) return { data: null, error: error.message, success: false };
   revalidatePath("/dashboard/inventory");

@@ -1,9 +1,8 @@
-import { createServerClient } from "@supabase/ssr";
+import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
 import { Database } from "@/types/database";
 
-// Regular client — uses logged-in user's session from cookies
 export async function createClient() {
   const cookieStore = await cookies();
 
@@ -15,7 +14,7 @@ export async function createClient() {
         getAll() {
           return cookieStore.getAll();
         },
-        setAll(cookiesToSet) {
+        setAll(cookiesToSet: { name: string; value: string; options?: CookieOptions }[]) {
           try {
             cookiesToSet.forEach(({ name, value, options }) =>
               cookieStore.set(name, value, options)
@@ -29,9 +28,7 @@ export async function createClient() {
   );
 }
 
-// Admin client — uses service role key, bypasses RLS, NO cookie handling
-// Never use this for user-scoped queries — only for admin operations
-// (creating users, cross-tenant ops, etc.)
+// Admin client — service role key, bypasses RLS, NO cookie handling
 export function createAdminClient() {
   return createSupabaseClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -39,7 +36,7 @@ export function createAdminClient() {
     {
       auth: {
         autoRefreshToken: false,
-        persistSession: false,
+        persistSession:   false,
       },
     }
   );

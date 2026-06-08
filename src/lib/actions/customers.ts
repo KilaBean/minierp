@@ -31,7 +31,9 @@ export async function createCustomer(formData: FormData): Promise<ApiResponse<Cu
   const { data: profile } = await supabase.from("user_profiles").select("business_id").single();
   if (!profile) return { data: null, error: "Not authenticated", success: false };
 
-  const { data, error } = await supabase.from("customers").insert({ ...parsed.data, business_id: (profile as any).business_id }).select().single();
+  const { data, error } = await (supabase.from("customers") as any)
+    .insert({ ...parsed.data, business_id: (profile as any).business_id })
+    .select().single();
   if (error) return { data: null, error: error.message, success: false };
   revalidatePath("/dashboard/customers");
   return { data: data as Customer, error: null, success: true };
@@ -43,7 +45,9 @@ export async function updateCustomer(id: string, formData: FormData): Promise<Ap
   if (!parsed.success) return { data: null, error: parsed.error.errors[0].message, success: false };
 
   const supabase = await createClient();
-  const { data, error } = await supabase.from("customers").update({ ...parsed.data, updated_at: new Date().toISOString() }).eq("id", id).select().single();
+  const { data, error } = await (supabase.from("customers") as any)
+    .update({ ...parsed.data, updated_at: new Date().toISOString() })
+    .eq("id", id).select().single();
   if (error) return { data: null, error: error.message, success: false };
   revalidatePath("/dashboard/customers");
   return { data: data as Customer, error: null, success: true };
