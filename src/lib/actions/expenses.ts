@@ -118,7 +118,7 @@ export async function createExpenseCategory(name: string, color?: string) {
   const { data: profile } = await supabase.from("user_profiles").select("business_id").single();
   if (!profile) return null;
   const { data } = await (supabase as any).from("expense_categories")
-    .insert({ name, color: color ?? "#6366f1", business_id: (profile as any).business_id })
+    .insert({ name, color: color ?? "#0ea5e9", business_id: (profile as any).business_id })
     .select()
     .single();
   revalidatePath("/dashboard/expenses");

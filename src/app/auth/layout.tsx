@@ -7,7 +7,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
       {/* Left panel — branding */}
       <div className="hidden lg:flex lg:w-1/2 flex-col justify-between p-12 relative overflow-hidden border-r border-border">
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-20 left-20 w-72 h-72 bg-indigo-600/10 rounded-full blur-[80px]" />
+          <div className="absolute top-20 left-20 w-72 h-72 bg-sky-600/10 rounded-full blur-[80px]" />
           <div className="absolute bottom-20 right-20 w-48 h-48 bg-violet-600/10 rounded-full blur-[60px]" />
           <div className="absolute inset-0 opacity-[0.03]"
             style={{ backgroundImage: "linear-gradient(currentColor 1px,transparent 1px),linear-gradient(90deg,currentColor 1px,transparent 1px)", backgroundSize: "40px 40px" }} />
@@ -15,7 +15,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
 
         <div className="relative">
           <Link href="/" className="flex items-center gap-2">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-sky-500 to-blue-600 flex items-center justify-center">
               <Zap size={18} className="text-white" />
             </div>
             <span className="text-xl font-bold text-foreground" style={{ fontFamily: "Bricolage Grotesque, sans-serif" }}>
@@ -55,7 +55,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
         {/* Mobile logo */}
         <div className="lg:hidden mb-8">
           <Link href="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-sky-500 to-blue-600 flex items-center justify-center">
               <Zap size={16} className="text-white" />
             </div>
             <span className="text-lg font-bold text-foreground" style={{ fontFamily: "Bricolage Grotesque, sans-serif" }}>

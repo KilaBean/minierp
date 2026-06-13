@@ -18,7 +18,7 @@ function DashboardMockup() {
         {[
           { label: "Revenue",  val: "$24,530", color: "text-emerald-500" },
           { label: "Expenses", val: "$8,210",  color: "text-red-500"     },
-          { label: "Profit",   val: "$16,320", color: "text-indigo-500"  },
+          { label: "Profit",   val: "$16,320", color: "text-sky-500"  },
           { label: "Orders",   val: "342",     color: "text-amber-500"   },
         ].map((s) => (
           <div key={s.label} className="bg-background rounded-xl p-3 border border-border">
@@ -60,7 +60,7 @@ function InventoryMockup() {
     <div className="p-5">
       <div className="flex items-center justify-between mb-4">
         <div className="h-6 w-40 bg-muted rounded" />
-        <div className="h-7 w-24 bg-indigo-600/60 rounded-lg text-xs text-white/60 flex items-center justify-center">+ Add Product</div>
+        <div className="h-7 w-24 bg-sky-600/60 rounded-lg text-xs text-white/60 flex items-center justify-center">+ Add Product</div>
       </div>
       <div className="bg-background rounded-xl border border-border overflow-hidden">
         <div className="flex text-xs text-muted-foreground px-4 py-2 border-b border-border">
@@ -95,10 +95,10 @@ function POSMockup() {
         <div className="text-xs text-muted-foreground mb-3">Products</div>
         <div className="grid grid-cols-2 gap-2">
           {[{ name: "Coffee", price: "$4.50" },{ name: "Tea", price: "$3.00" },{ name: "Muffin", price: "$3.50" },{ name: "Sandwich", price: "$7.00" }].map((p) => (
-            <div key={p.name} className="bg-background border border-border rounded-xl p-3 cursor-pointer hover:border-indigo-500/40 transition-colors">
-              <div className="w-8 h-8 rounded-lg bg-indigo-500/10 mb-2" />
+            <div key={p.name} className="bg-background border border-border rounded-xl p-3 cursor-pointer hover:border-sky-500/40 transition-colors">
+              <div className="w-8 h-8 rounded-lg bg-sky-500/10 mb-2" />
               <div className="text-xs text-foreground">{p.name}</div>
-              <div className="text-xs text-indigo-500 font-medium">{p.price}</div>
+              <div className="text-xs text-sky-500 font-medium">{p.price}</div>
             </div>
           ))}
         </div>
@@ -115,7 +115,7 @@ function POSMockup() {
         <div className="border-t border-border pt-3 mb-4">
           <div className="flex justify-between text-sm font-bold text-foreground"><span>Total</span><span>$12.50</span></div>
         </div>
-        <div className="bg-indigo-600 rounded-xl py-2.5 text-xs text-white text-center font-medium">Charge $12.50</div>
+        <div className="bg-sky-600 rounded-xl py-2.5 text-xs text-white text-center font-medium">Charge $12.50</div>
       </div>
     </div>
   );
@@ -135,14 +135,14 @@ function CustomersMockup() {
       <div className="bg-background rounded-xl border border-border overflow-hidden">
         {["Sarah K.","James O.","Amara D.","Chen W."].map((name, i) => (
           <div key={name} className="flex items-center gap-3 px-4 py-3 border-b border-border last:border-0 hover:bg-muted/20 transition-colors">
-            <div className="w-7 h-7 rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-xs text-white font-bold flex-shrink-0">
+            <div className="w-7 h-7 rounded-full bg-gradient-to-br from-sky-500 to-blue-600 flex items-center justify-center text-xs text-white font-bold flex-shrink-0">
               {name[0]}
             </div>
             <div className="flex-1 min-w-0">
               <div className="text-xs text-foreground">{name}</div>
               <div className="text-xs text-muted-foreground">{[12,8,24,5][i]} purchases</div>
             </div>
-            <div className="text-xs text-indigo-500">${[420,310,890,150][i]}</div>
+            <div className="text-xs text-sky-500">${[420,310,890,150][i]}</div>
           </div>
         ))}
       </div>
@@ -181,7 +181,7 @@ export function DashboardPreview() {
           {tabs.map((tab) => (
             <button key={tab.id} onClick={() => setActiveTab(tab.id)}
               className={cn("flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200",
-                activeTab === tab.id ? "bg-indigo-600 text-white" : "text-muted-foreground hover:text-foreground hover:bg-accent")}>
+                activeTab === tab.id ? "bg-sky-600 text-white" : "text-muted-foreground hover:text-foreground hover:bg-accent")}>
               <tab.icon size={14} />{tab.label}
             </button>
           ))}

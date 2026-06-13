@@ -13,7 +13,7 @@ import { formatRelativeTime } from "@/lib/utils/index";
 import { cn } from "@/lib/utils";
 
 const typeConfig = {
-  info:    { icon: Info,          color: "text-indigo-500", bg: "bg-indigo-500/10"  },
+  info:    { icon: Info,          color: "text-sky-500", bg: "bg-sky-500/10"  },
   warning: { icon: AlertTriangle, color: "text-amber-500",  bg: "bg-amber-500/10"   },
   success: { icon: CheckCircle,   color: "text-emerald-500",bg: "bg-emerald-500/10" },
   error:   { icon: XCircle,       color: "text-red-500",    bg: "bg-red-500/10"     },
@@ -96,7 +96,7 @@ export function NotificationBell({ businessId }: { businessId: string }) {
       >
         <Bell size={16} />
         {unreadCount > 0 && (
-          <span className="absolute top-1 right-1 min-w-[16px] h-4 rounded-full bg-indigo-600 text-white text-[10px] font-bold flex items-center justify-center px-0.5 leading-none">
+          <span className="absolute top-1 right-1 min-w-[16px] h-4 rounded-full bg-sky-600 text-white text-[10px] font-bold flex items-center justify-center px-0.5 leading-none">
             {unreadCount > 99 ? "99+" : unreadCount}
           </span>
         )}
@@ -110,7 +110,7 @@ export function NotificationBell({ businessId }: { businessId: string }) {
             <div className="flex items-center gap-2">
               <span className="text-sm font-semibold text-foreground">Notifications</span>
               {unreadCount > 0 && (
-                <span className="text-xs px-1.5 py-0.5 rounded-full bg-indigo-500/15 text-indigo-600 dark:text-indigo-400 font-medium">
+                <span className="text-xs px-1.5 py-0.5 rounded-full bg-sky-500/15 text-sky-600 dark:text-sky-400 font-medium">
                   {unreadCount} new
                 </span>
               )}
@@ -163,7 +163,7 @@ export function NotificationBell({ businessId }: { businessId: string }) {
                     className={cn(
                       "flex items-start gap-3 px-4 py-3 border-b border-border last:border-0 transition-colors group",
                       n.link ? "cursor-pointer hover:bg-accent" : "cursor-default",
-                      !n.read && "bg-indigo-500/5"
+                      !n.read && "bg-sky-500/5"
                     )}
                   >
                     {/* Icon */}
@@ -207,7 +207,7 @@ export function NotificationBell({ businessId }: { businessId: string }) {
 
                     {/* Unread dot */}
                     {!n.read && (
-                      <div className="w-2 h-2 rounded-full bg-indigo-500 flex-shrink-0 mt-1.5" />
+                      <div className="w-2 h-2 rounded-full bg-sky-500 flex-shrink-0 mt-1.5" />
                     )}
                   </div>
                 );

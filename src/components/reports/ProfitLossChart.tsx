@@ -49,7 +49,7 @@ export function ProfitLossChart({ data, currency = "USD" }: Props) {
             <Tooltip content={<CustomTooltip currency={currency} />} />
             <Legend wrapperStyle={{ fontSize: "11px", paddingTop: "12px" }} />
             <ReferenceLine y={0} stroke="hsl(var(--border))" />
-            <Bar dataKey="revenue" name="Revenue" fill="#6366f1" fillOpacity={0.85} radius={[4,4,0,0]} />
+            <Bar dataKey="revenue" name="Revenue" fill="#0ea5e9" fillOpacity={0.85} radius={[4,4,0,0]} />
             <Bar dataKey="expense" name="Expense" fill="#f43f5e" fillOpacity={0.75} radius={[4,4,0,0]} />
             <Bar dataKey="profit"  name="Profit"  fill="#10b981" fillOpacity={0.85} radius={[4,4,0,0]} />
           </BarChart>

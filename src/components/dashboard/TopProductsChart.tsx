@@ -4,7 +4,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import { TopProduct } from "@/types";
 import { formatCurrency, truncate } from "@/lib/utils/index";
 
-const COLORS = ["#6366f1","#8b5cf6","#06b6d4","#10b981","#f59e0b"];
+const COLORS = ["#0ea5e9","#8b5cf6","#06b6d4","#10b981","#f59e0b"];
 
 interface Props { data: TopProduct[]; currency?: string; }
 
@@ -14,7 +14,7 @@ function CustomTooltip({ active, payload, currency }: any) {
   return (
     <div className="bg-popover border border-border rounded-xl p-3 shadow-xl">
       <p className="text-xs font-medium text-foreground mb-1">{d.product_name}</p>
-      <p className="text-sm font-bold text-indigo-500">{formatCurrency(d.revenue, currency)}</p>
+      <p className="text-sm font-bold text-sky-500">{formatCurrency(d.revenue, currency)}</p>
       <p className="text-xs text-muted-foreground">{d.total_sold} units sold</p>
     </div>
   );

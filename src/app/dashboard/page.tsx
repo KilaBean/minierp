@@ -31,8 +31,8 @@ async function StatsRow() {
         change={stats.revenue_change}
         isCurrency currency={currency}
         icon={DollarSign}
-        iconColor="text-indigo-400"
-        iconBg="bg-indigo-500/15"
+        iconColor="text-sky-400"
+        iconBg="bg-sky-500/15"
       />
       <StatCard
         title="Total Expenses"

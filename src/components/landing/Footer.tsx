@@ -15,7 +15,7 @@ export function Footer() {
         <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-12">
           <div className="col-span-2 md:col-span-1">
             <Link href="/" className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-sky-500 to-blue-600 flex items-center justify-center">
                 <Zap size={16} className="text-white" />
               </div>
               <span className="text-lg font-bold text-foreground" style={{ fontFamily: "Bricolage Grotesque, sans-serif" }}>MiniERP</span>

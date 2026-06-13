@@ -180,7 +180,7 @@ export function ExpensesClient({ initialData, total, totalPages, page, categorie
                   <td className="px-4 py-3 text-sm font-medium text-foreground">{exp.title}</td>
                   <td className="px-4 py-3">
                     {exp.expense_categories ? (
-                      <span className="text-xs px-2 py-0.5 rounded-full font-medium" style={{ background: `${exp.expense_categories.color ?? "#6366f1"}20`, color: exp.expense_categories.color ?? "#6366f1" }}>
+                      <span className="text-xs px-2 py-0.5 rounded-full font-medium" style={{ background: `${exp.expense_categories.color ?? "#0ea5e9"}20`, color: exp.expense_categories.color ?? "#0ea5e9" }}>
                         {exp.expense_categories.name}
                       </span>
                     ) : <span className="text-sm text-muted-foreground">—</span>}

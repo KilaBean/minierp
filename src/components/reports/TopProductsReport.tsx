@@ -14,7 +14,7 @@ interface ProductRow {
 
 interface Props { data: ProductRow[]; currency?: string; }
 
-const COLORS = ["#6366f1","#8b5cf6","#06b6d4","#10b981","#f59e0b","#f43f5e","#ec4899","#14b8a6","#84cc16","#f97316"];
+const COLORS = ["#0ea5e9","#8b5cf6","#06b6d4","#10b981","#f59e0b","#f43f5e","#ec4899","#14b8a6","#84cc16","#f97316"];
 
 export function TopProductsReport({ data, currency = "USD" }: Props) {
   const maxRevenue = data[0]?.revenue ?? 1;

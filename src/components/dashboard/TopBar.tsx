@@ -82,7 +82,7 @@ export function TopBar() {
         </button>
 
         {/* Avatar */}
-        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-xs font-bold text-white ml-1 cursor-pointer select-none">
+        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-sky-500 to-blue-600 flex items-center justify-center text-xs font-bold text-white ml-1 cursor-pointer select-none">
           {user?.full_name ? getInitials(user.full_name) : "U"}
         </div>
       </div>

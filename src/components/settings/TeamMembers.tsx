@@ -19,7 +19,7 @@ interface Member {
 }
 
 const roleColors: Record<string, string> = {
-  admin:   "bg-indigo-500/15 text-indigo-600 dark:text-indigo-300",
+  admin:   "bg-sky-500/15 text-sky-600 dark:text-sky-300",
   manager: "bg-emerald-500/15 text-emerald-600 dark:text-emerald-300",
   cashier: "bg-amber-500/15 text-amber-600 dark:text-amber-300",
 };
@@ -67,7 +67,7 @@ export function TeamMembers({ members }: { members: Member[] }) {
           return (
             <div key={member.id} className="flex items-center gap-4 px-5 py-4 hover:bg-muted/20 transition-colors">
               {/* Avatar */}
-              <div className="w-9 h-9 rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-sm font-bold text-white flex-shrink-0">
+              <div className="w-9 h-9 rounded-full bg-gradient-to-br from-sky-500 to-blue-600 flex items-center justify-center text-sm font-bold text-white flex-shrink-0">
                 {member.full_name ? getInitials(member.full_name) : member.email[0].toUpperCase()}
               </div>
 

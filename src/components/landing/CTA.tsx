@@ -5,7 +5,7 @@ export function CTA() {
   return (
     <section className="py-24 px-4">
       <div className="max-w-4xl mx-auto">
-        <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-indigo-600 to-violet-700 p-12 md:p-16 text-center">
+        <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-sky-600 to-blue-700 p-12 md:p-16 text-center">
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
             <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/4" />
             <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full translate-y-1/2 -translate-x-1/4" />
@@ -25,7 +25,7 @@ export function CTA() {
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link href="/auth/register"
-                className="group inline-flex items-center gap-2 px-7 py-3.5 bg-white text-indigo-700 rounded-xl font-semibold hover:bg-white/90 transition-all duration-200 shadow-lg">
+                className="group inline-flex items-center gap-2 px-7 py-3.5 bg-white text-sky-700 rounded-xl font-semibold hover:bg-white/90 transition-all duration-200 shadow-lg">
                 Get started for free
                 <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
               </Link>

@@ -55,7 +55,7 @@ export function Sidebar() {
         )}
       >
         <div className={cn("flex items-center h-16 px-4 border-b border-sidebar-border flex-shrink-0 gap-3", sidebarCollapsed && "md:justify-center md:gap-0")}>
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center flex-shrink-0"><Zap size={15} className="text-white" /></div>
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-sky-500 to-blue-600 flex items-center justify-center flex-shrink-0"><Zap size={15} className="text-white" /></div>
           <span className={cn("text-base font-bold text-sidebar-foreground truncate", sidebarCollapsed && "md:hidden")} style={{ fontFamily: "Bricolage Grotesque, sans-serif" }}>MiniERP</span>
           {/* Mobile-only collapse/close button */}
           <button
@@ -71,8 +71,8 @@ export function Sidebar() {
             const active = pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(item.href));
             return (
               <Link key={item.href} href={item.href} onClick={closeMobile} title={sidebarCollapsed ? item.label : undefined}
-                className={cn("flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all relative group", active ? "bg-indigo-600/15 text-indigo-600 dark:text-indigo-300" : "text-sidebar-foreground/50 hover:text-sidebar-foreground hover:bg-sidebar-accent", sidebarCollapsed && "md:justify-center")}>
-                {active && <span className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-5 bg-indigo-500 rounded-r-full" />}
+                className={cn("flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all relative group", active ? "bg-sky-600/15 text-sky-600 dark:text-sky-300" : "text-sidebar-foreground/50 hover:text-sidebar-foreground hover:bg-sidebar-accent", sidebarCollapsed && "md:justify-center")}>
+                {active && <span className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-5 bg-sky-500 rounded-r-full" />}
                 <item.icon size={17} className="flex-shrink-0" />
                 <span className={cn("truncate", sidebarCollapsed && "md:hidden")}>{item.label}</span>
                 {sidebarCollapsed && <span className="hidden md:block absolute left-full ml-3 px-2 py-1 bg-popover border border-border text-popover-foreground text-xs rounded-md opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap z-50 shadow-xl">{item.label}</span>}
@@ -84,7 +84,7 @@ export function Sidebar() {
           {user && (
             <div className={cn("px-3 py-2", sidebarCollapsed && "md:hidden")}>
               <div className="text-xs font-medium text-sidebar-foreground/70 truncate">{user.full_name ?? user.email}</div>
-              <span className={cn("inline-block text-xs px-1.5 py-0.5 rounded-full capitalize font-medium mt-0.5", role === "admin" && "bg-indigo-500/20 text-indigo-600 dark:text-indigo-300", role === "manager" && "bg-emerald-500/20 text-emerald-600 dark:text-emerald-300", role === "cashier" && "bg-amber-500/20 text-amber-600 dark:text-amber-300")}>{role}</span>
+              <span className={cn("inline-block text-xs px-1.5 py-0.5 rounded-full capitalize font-medium mt-0.5", role === "admin" && "bg-sky-500/20 text-sky-600 dark:text-sky-300", role === "manager" && "bg-emerald-500/20 text-emerald-600 dark:text-emerald-300", role === "cashier" && "bg-amber-500/20 text-amber-600 dark:text-amber-300")}>{role}</span>
             </div>
           )}
           <form action={signOut}>

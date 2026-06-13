@@ -21,7 +21,7 @@ export function Pricing() {
     <section id="pricing" className="py-24 px-4 relative">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-indigo-500/30 bg-indigo-500/10 text-indigo-600 dark:text-indigo-300 text-xs font-medium mb-4">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-sky-500/30 bg-sky-500/10 text-sky-600 dark:text-sky-300 text-xs font-medium mb-4">
             <Zap size={12} />Simple pricing
           </div>
           <h2 className="text-3xl md:text-5xl font-bold text-foreground mb-4"
@@ -49,9 +49,9 @@ export function Pricing() {
         <div className="grid md:grid-cols-3 gap-5">
           {plans.map((plan) => (
             <div key={plan.name}
-              className={cn("relative rounded-2xl p-6", plan.highlighted ? "bg-indigo-600/10 border-2 border-indigo-500/50" : "bg-card border border-border")}>
+              className={cn("relative rounded-2xl p-6", plan.highlighted ? "bg-sky-600/10 border-2 border-sky-500/50" : "bg-card border border-border")}>
               {plan.badge && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-indigo-600 text-white text-xs font-medium">
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-sky-600 text-white text-xs font-medium">
                   {plan.badge}
                 </div>
               )}
@@ -70,7 +70,7 @@ export function Pricing() {
               </div>
               <Link href={plan.href}
                 className={cn("block text-center py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 mb-6",
-                  plan.highlighted ? "bg-indigo-600 hover:bg-indigo-500 text-white" : "bg-muted hover:bg-muted/80 text-foreground")}>
+                  plan.highlighted ? "bg-sky-600 hover:bg-sky-500 text-white" : "bg-muted hover:bg-muted/80 text-foreground")}>
                 {plan.cta}
               </Link>
               <div className="space-y-2.5">

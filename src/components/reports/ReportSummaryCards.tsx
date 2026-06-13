@@ -19,8 +19,8 @@ export function ReportSummaryCards({ summary, currency = "USD" }: Props) {
       title:   "Revenue (MTD)",
       value:   formatCurrency(summary.month_revenue, currency),
       icon:    DollarSign,
-      iconBg:  "bg-indigo-500/15",
-      iconColor: "text-indigo-500",
+      iconBg:  "bg-sky-500/15",
+      iconColor: "text-sky-500",
       sub:     `${formatCurrency(summary.year_revenue, currency)} YTD`,
     },
     {

@@ -10,7 +10,7 @@ interface Movement {
 const typeConfig: Record<string, { label: string; icon: React.ElementType; color: string; bg: string }> = {
   in:         { label: "Stock In",   icon: ArrowUpCircle,   color: "text-emerald-600 dark:text-emerald-400", bg: "bg-emerald-500/15" },
   out:        { label: "Stock Out",  icon: ArrowDownCircle, color: "text-red-600 dark:text-red-400",         bg: "bg-red-500/15"     },
-  adjustment: { label: "Adjustment", icon: RefreshCw,       color: "text-indigo-600 dark:text-indigo-400",   bg: "bg-indigo-500/15"  },
+  adjustment: { label: "Adjustment", icon: RefreshCw,       color: "text-sky-600 dark:text-sky-400",   bg: "bg-sky-500/15"  },
   sale:       { label: "Sale",       icon: ShoppingCart,    color: "text-amber-600 dark:text-amber-400",     bg: "bg-amber-500/15"   },
   return:     { label: "Return",     icon: RotateCcw,       color: "text-violet-600 dark:text-violet-400",   bg: "bg-violet-500/15"  },
 };

@@ -18,7 +18,7 @@ function CustomTooltip({ active, payload, currency }: any) {
   return (
     <div className="bg-popover border border-border rounded-xl p-3 shadow-xl">
       <p className="text-xs text-muted-foreground mb-1">{dateStr}</p>
-      <p className="text-sm font-bold text-indigo-500">{formatCurrency(payload[0]?.value ?? 0, currency)}</p>
+      <p className="text-sm font-bold text-sky-500">{formatCurrency(payload[0]?.value ?? 0, currency)}</p>
       <p className="text-xs text-muted-foreground">{payload[1]?.value ?? 0} orders</p>
     </div>
   );
@@ -39,15 +39,15 @@ export function RevenueChart({ data, currency = "USD" }: Props) {
           <p className="text-xs text-muted-foreground mt-0.5">Last 30 days</p>
         </div>
         <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
-          <span className="w-2 h-2 rounded-full bg-indigo-500" />Revenue
+          <span className="w-2 h-2 rounded-full bg-sky-500" />Revenue
         </span>
       </div>
       <ResponsiveContainer width="100%" height={220}>
         <AreaChart data={formatted} margin={{ top: 5, right: 5, left: -20, bottom: 0 }}>
           <defs>
             <linearGradient id="revenueGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%"  stopColor="#6366f1" stopOpacity={0.25} />
-              <stop offset="95%" stopColor="#6366f1" stopOpacity={0} />
+              <stop offset="5%"  stopColor="#0ea5e9" stopOpacity={0.25} />
+              <stop offset="95%" stopColor="#0ea5e9" stopOpacity={0} />
             </linearGradient>
           </defs>
           <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
@@ -55,8 +55,8 @@ export function RevenueChart({ data, currency = "USD" }: Props) {
           <YAxis tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} axisLine={false} tickLine={false}
             tickFormatter={(v) => `$${v >= 1000 ? `${(v/1000).toFixed(0)}k` : v}`} />
           <Tooltip content={<CustomTooltip currency={currency} />} />
-          <Area type="monotone" dataKey="revenue" stroke="#6366f1" strokeWidth={2}
-            fill="url(#revenueGrad)" dot={false} activeDot={{ r: 4, fill: "#6366f1" }} />
+          <Area type="monotone" dataKey="revenue" stroke="#0ea5e9" strokeWidth={2}
+            fill="url(#revenueGrad)" dot={false} activeDot={{ r: 4, fill: "#0ea5e9" }} />
         </AreaChart>
       </ResponsiveContainer>
     </div>

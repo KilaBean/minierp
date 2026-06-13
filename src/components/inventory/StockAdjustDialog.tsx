@@ -14,7 +14,7 @@ type AdjustType = "in" | "out" | "adjustment";
 const types: { value: AdjustType; label: string; icon: React.ElementType; color: string }[] = [
   { value: "in",         label: "Add stock",    icon: Plus,      color: "text-emerald-500" },
   { value: "out",        label: "Remove stock", icon: Minus,     color: "text-red-500"     },
-  { value: "adjustment", label: "Set quantity", icon: RefreshCw, color: "text-indigo-500"  },
+  { value: "adjustment", label: "Set quantity", icon: RefreshCw, color: "text-sky-500"  },
 ];
 
 export function StockAdjustDialog({ product, onClose }: Props) {

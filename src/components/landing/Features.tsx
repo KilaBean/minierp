@@ -2,7 +2,7 @@ import { Package, ShoppingCart, Users, Receipt, BarChart3, Shield, Zap, Globe } 
 
 const features = [
   { icon: Package,      title: "Inventory Management",  description: "Track stock levels in real-time. Get low stock alerts before you run out. Manage categories effortlessly.", color: "from-blue-500 to-cyan-500",      bg: "bg-blue-500/10",    border: "border-blue-500/20"    },
-  { icon: ShoppingCart, title: "POS & Sales System",    description: "Process sales with a lightning-fast point-of-sale interface. Apply discounts and accept multiple payment methods.", color: "from-indigo-500 to-violet-500", bg: "bg-indigo-500/10",  border: "border-indigo-500/20"  },
+  { icon: ShoppingCart, title: "POS & Sales System",    description: "Process sales with a lightning-fast point-of-sale interface. Apply discounts and accept multiple payment methods.", color: "from-sky-500 to-blue-500", bg: "bg-sky-500/10",  border: "border-sky-500/20"  },
   { icon: Users,        title: "Customer Management",   description: "Build rich customer profiles. Track purchase history, preferences, and contact info.", color: "from-violet-500 to-purple-500", bg: "bg-violet-500/10",  border: "border-violet-500/20"  },
   { icon: Receipt,      title: "Expense Tracking",      description: "Log business expenses with ease. Categorise spending and see exactly where your money goes.", color: "from-rose-500 to-pink-500",     bg: "bg-rose-500/10",    border: "border-rose-500/20"    },
   { icon: BarChart3,    title: "Reports & Analytics",   description: "Beautiful dashboards with real-time insights. Track revenue trends, top products, and profit margins.", color: "from-amber-500 to-orange-500",  bg: "bg-amber-500/10",   border: "border-amber-500/20"   },
@@ -14,10 +14,10 @@ const features = [
 export function Features() {
   return (
     <section id="features" className="py-24 px-4 relative">
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-indigo-500/5 to-transparent pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-sky-500/5 to-transparent pointer-events-none" />
       <div className="max-w-7xl mx-auto relative">
         <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-indigo-500/30 bg-indigo-500/10 text-indigo-600 dark:text-indigo-300 text-xs font-medium mb-4">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-sky-500/30 bg-sky-500/10 text-sky-600 dark:text-sky-300 text-xs font-medium mb-4">
             Everything you need
           </div>
           <h2 className="text-3xl md:text-5xl font-bold text-foreground mb-4"

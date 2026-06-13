@@ -35,7 +35,7 @@ export function Navbar() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 group">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center group-hover:scale-105 transition-transform">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-sky-500 to-blue-600 flex items-center justify-center group-hover:scale-105 transition-transform">
               <Zap size={16} className="text-white" />
             </div>
             <span className="text-lg font-bold text-foreground"
@@ -68,7 +68,7 @@ export function Navbar() {
               Sign in
             </Link>
             <Link href="/auth/register"
-              className="text-sm bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg transition-colors font-medium">
+              className="text-sm bg-sky-600 hover:bg-sky-500 text-white px-4 py-2 rounded-lg transition-colors font-medium">
               Start free
             </Link>
           </div>
@@ -100,7 +100,7 @@ export function Navbar() {
           ))}
           <div className="pt-3 border-t border-border flex flex-col gap-2">
             <Link href="/auth/login" className="text-sm text-muted-foreground text-center py-2">Sign in</Link>
-            <Link href="/auth/register" className="text-sm bg-indigo-600 text-white text-center py-2 rounded-lg font-medium">Start free</Link>
+            <Link href="/auth/register" className="text-sm bg-sky-600 text-white text-center py-2 rounded-lg font-medium">Start free</Link>
           </div>
         </div>
       )}

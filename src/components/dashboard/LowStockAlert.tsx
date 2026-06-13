@@ -22,7 +22,7 @@ export function LowStockAlert({ data }: { data: LowStockItem[] }) {
             </span>
           )}
         </div>
-        <Link href="/dashboard/inventory" className="text-xs text-indigo-500 hover:text-indigo-400 transition-colors">
+        <Link href="/dashboard/inventory" className="text-xs text-sky-500 hover:text-sky-400 transition-colors">
           View all
         </Link>
       </div>
