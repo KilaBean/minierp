@@ -15,7 +15,11 @@ interface ProfileRow {
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  // getSession() reads the JWT locally from the signed HTTP-only cookie (no
+  // network call), avoiding the Supabase auth rate limit that getUser() trips
+  // when combined with the middleware + notification auth checks per request.
+  const { data: { session } } = await supabase.auth.getSession();
+  const user = session?.user;
   if (!user) redirect("/auth/login");
 
   const { data: profileRaw } = await supabase

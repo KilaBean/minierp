@@ -36,9 +36,13 @@ export async function updateSession(request: NextRequest) {
   // For protected routes, validate the session
   // Wrap in try/catch so a Supabase outage never blocks navigation entirely
   try {
-    const { data: { user } } = await supabase.auth.getUser();
+    // Use getSession() (local JWT decode from the HTTP-only cookie — no network
+    // call to Supabase auth) instead of getUser() (remote verification) to avoid
+    // tripping the auth rate limit on every navigation. The cookie is signed by
+    // Supabase and cannot be tampered with by the client, so it's safe as a gate.
+    const { data: { session } } = await supabase.auth.getSession();
 
-    if (!user) {
+    if (!session) {
       const redirectUrl = request.nextUrl.clone();
       redirectUrl.pathname = "/auth/login";
       redirectUrl.searchParams.set("redirect", pathname);

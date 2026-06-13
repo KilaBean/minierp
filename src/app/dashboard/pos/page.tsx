@@ -1,7 +1,6 @@
 import { getProducts } from "@/lib/actions/products";
 import { getCategories } from "@/lib/actions/categories";
-import { ProductGrid } from "@/components/pos/ProductGrid";
-import { CartPanel } from "@/components/pos/CartPanel";
+import { POSShell } from "@/components/pos/POSShell";
 import { createClient } from "@/lib/supabase/server";
 
 export default async function POSPage() {
@@ -17,20 +16,11 @@ export default async function POSPage() {
   const taxRate  = profile?.businesses?.tax_rate  ?? 0;
 
   return (
-    <div className="fixed inset-0 pt-16 flex" style={{ left: "var(--sidebar-width, 240px)" }}>
-      {/* Product area */}
-      <div className="flex-1 overflow-hidden flex flex-col bg-background">
-        <ProductGrid
-          products={products.data}
-          categories={categories}
-          currency={currency}
-        />
-      </div>
-
-      {/* Cart panel */}
-      <div className="w-80 xl:w-96 flex-shrink-0 overflow-hidden flex flex-col">
-        <CartPanel currency={currency} taxRate={Number(taxRate)} />
-      </div>
-    </div>
+    <POSShell
+      products={products.data}
+      categories={categories}
+      currency={currency}
+      taxRate={Number(taxRate)}
+    />
   );
 }

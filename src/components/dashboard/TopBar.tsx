@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { Search, Sun, Moon } from "lucide-react";
+import { Search, Sun, Moon, Menu } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { useAuthStore } from "@/store/useAuthStore";
@@ -24,7 +24,7 @@ const routeLabels: Record<string, string> = {
 export function TopBar() {
   const pathname = usePathname();
   const user     = useAuthStore((s) => s.user);
-  const { sidebarCollapsed } = useUIStore();
+  const { sidebarCollapsed, toggleMobileSidebar } = useUIStore();
   const { theme, setTheme }  = useTheme();
   const [mounted, setMounted] = useState(false);
 
@@ -34,16 +34,27 @@ export function TopBar() {
 
   return (
     <header className={cn(
-      "fixed top-0 right-0 h-16 z-30 flex items-center justify-between px-6",
+      "fixed top-0 right-0 h-16 z-30 flex items-center justify-between px-4 sm:px-6",
       "bg-background/80 backdrop-blur-md border-b border-border transition-all duration-300",
-      sidebarCollapsed ? "left-16" : "left-60"
+      "left-0",
+      sidebarCollapsed ? "md:left-16" : "md:left-60"
     )}>
       {/* Left */}
-      <div>
-        <h1 className="text-sm font-semibold text-foreground">{pageTitle}</h1>
-        <p className="text-xs text-muted-foreground hidden sm:block">
-          {user?.business_name ?? "Your Business"}
-        </p>
+      <div className="flex items-center gap-2 min-w-0">
+        {/* Hamburger — mobile only */}
+        <button
+          onClick={toggleMobileSidebar}
+          aria-label="Open menu"
+          className="md:hidden p-2 -ml-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent transition-all"
+        >
+          <Menu size={18} />
+        </button>
+        <div className="min-w-0">
+          <h1 className="text-sm font-semibold text-foreground truncate">{pageTitle}</h1>
+          <p className="text-xs text-muted-foreground hidden sm:block truncate">
+            {user?.business_name ?? "Your Business"}
+          </p>
+        </div>
       </div>
 
       {/* Right */}
