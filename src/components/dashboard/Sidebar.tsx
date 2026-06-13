@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Package, ShoppingCart, Users, Receipt, BarChart3, Settings, Zap, LogOut, PanelLeftClose, PanelLeftOpen, ClipboardList } from "lucide-react";
+import { LayoutDashboard, Package, ShoppingCart, Users, Receipt, BarChart3, Settings, Zap, LogOut, PanelLeftClose, PanelLeftOpen, ClipboardList, X } from "lucide-react";
 import { useUIStore } from "@/store/useUIStore";
 import { useAuthStore } from "@/store/useAuthStore";
 import { signOut } from "@/lib/actions/auth";
@@ -57,6 +57,14 @@ export function Sidebar() {
         <div className={cn("flex items-center h-16 px-4 border-b border-sidebar-border flex-shrink-0 gap-3", sidebarCollapsed && "md:justify-center md:gap-0")}>
           <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center flex-shrink-0"><Zap size={15} className="text-white" /></div>
           <span className={cn("text-base font-bold text-sidebar-foreground truncate", sidebarCollapsed && "md:hidden")} style={{ fontFamily: "Bricolage Grotesque, sans-serif" }}>MiniERP</span>
+          {/* Mobile-only collapse/close button */}
+          <button
+            onClick={closeMobile}
+            aria-label="Collapse menu"
+            className="md:hidden ml-auto p-1.5 rounded-lg text-sidebar-foreground/50 hover:text-sidebar-foreground hover:bg-sidebar-accent transition-all"
+          >
+            <X size={18} />
+          </button>
         </div>
         <nav className="flex-1 overflow-y-auto py-4 px-2 space-y-0.5">
           {visible.map((item) => {
