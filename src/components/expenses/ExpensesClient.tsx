@@ -6,7 +6,8 @@ import { Plus, Pencil, Trash2, Search, X, Loader2, Receipt, ChevronLeft, Chevron
 import { toast } from "sonner";
 import { createExpense, updateExpense, deleteExpense, createExpenseCategory } from "@/lib/actions/expenses";
 import { formatCurrency, formatDate, debounce } from "@/lib/utils/index";
-import { cn } from "@/lib/utils";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { useCallback } from "react";
 
 interface ExpenseCategory { id: string; name: string; color: string | null; }
@@ -124,16 +125,16 @@ export function ExpensesClient({ initialData, total, totalPages, page, categorie
 
   return (
     <div className="max-w-7xl mx-auto space-y-5">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h2 className="text-xl font-bold text-foreground" style={{ fontFamily: "Bricolage Grotesque, sans-serif" }}>Expenses</h2>
-          <p className="text-sm text-muted-foreground mt-0.5">{total} expenses · {formatCurrency(totalAmount, currency)} shown</p>
-        </div>
-        <button onClick={() => { setEditing(null); setDialogOpen(true); }}
-          className="flex items-center gap-2 px-4 py-2.5 text-sm bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl font-semibold transition-all">
-          <Plus size={15} /> Add Expense
-        </button>
-      </div>
+      <PageHeader
+        title="Expenses"
+        subtitle={`${total} expenses · ${formatCurrency(totalAmount, currency)} shown`}
+        action={
+          <button onClick={() => { setEditing(null); setDialogOpen(true); }}
+            className="flex items-center gap-2 px-4 py-2.5 text-sm bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl font-semibold transition-all">
+            <Plus size={15} /> Add Expense
+          </button>
+        }
+      />
 
       {/* Filters */}
       <div className="flex flex-col sm:flex-row gap-3 flex-wrap">
@@ -164,16 +165,25 @@ export function ExpensesClient({ initialData, total, totalPages, page, categorie
       <div className="bg-card border border-border rounded-2xl overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead><tr className="border-b border-border">
-              {["Title","Category","Amount","Date","Notes",""].map((h) => (
-                <th key={h} className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">{h}</th>
+            <thead><tr className="border-b border-border bg-muted/30">
+              {["Title","Category","Amount","Date","Notes",""].map((h, i) => (
+                <th key={h} className={`px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider ${i === 2 ? "text-right" : "text-left"}`}>{h}</th>
               ))}
             </tr></thead>
             <tbody>
               {initialData.length === 0 ? (
-                <tr><td colSpan={6} className="px-4 py-16 text-center">
-                  <Receipt size={28} className="mx-auto mb-3 text-muted-foreground/30" />
-                  <p className="text-sm text-muted-foreground">No expenses yet</p>
+                <tr><td colSpan={6} className="p-0">
+                  <EmptyState
+                    icon={Receipt}
+                    title="No expenses yet"
+                    description="Record a business expense to track where your money goes."
+                    action={
+                      <button onClick={() => { setEditing(null); setDialogOpen(true); }}
+                        className="flex items-center gap-2 px-4 py-2.5 text-sm bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl font-semibold transition-all">
+                        <Plus size={15} /> Add Expense
+                      </button>
+                    }
+                  />
                 </td></tr>
               ) : initialData.map((exp) => (
                 <tr key={exp.id} className="border-b border-border last:border-0 hover:bg-muted/30 transition-colors">
@@ -185,7 +195,7 @@ export function ExpensesClient({ initialData, total, totalPages, page, categorie
                       </span>
                     ) : <span className="text-sm text-muted-foreground">—</span>}
                   </td>
-                  <td className="px-4 py-3 text-sm font-semibold text-rose-500">{formatCurrency(Number(exp.amount), currency)}</td>
+                  <td className="px-4 py-3 text-sm font-semibold text-rose-500 text-right tabular-nums">{formatCurrency(Number(exp.amount), currency)}</td>
                   <td className="px-4 py-3 text-sm text-muted-foreground whitespace-nowrap">{formatDate(exp.date)}</td>
                   <td className="px-4 py-3 text-sm text-muted-foreground max-w-[180px] truncate">{exp.notes ?? "—"}</td>
                   <td className="px-4 py-3">

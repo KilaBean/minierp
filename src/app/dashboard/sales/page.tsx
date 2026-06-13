@@ -2,6 +2,7 @@ import { getSales } from "@/lib/actions/sales";
 import { createClient } from "@/lib/supabase/server";
 import { SalesTable } from "@/components/sales/SalesTable";
 import { SalesFilters } from "@/components/sales/SalesFilters";
+import { PageHeader } from "@/components/ui/PageHeader";
 import Link from "next/link";
 import { ShoppingCart } from "lucide-react";
 
@@ -27,18 +28,16 @@ export default async function SalesPage({ searchParams }: PageProps) {
 
   return (
     <div className="max-w-7xl mx-auto space-y-5">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h2 className="text-xl font-bold text-foreground" style={{ fontFamily: "Bricolage Grotesque, sans-serif" }}>
-            Sales
-          </h2>
-          <p className="text-sm text-muted-foreground mt-0.5">{total} transaction{total !== 1 ? "s" : ""}</p>
-        </div>
-        <Link href="/dashboard/pos"
-          className="flex items-center gap-2 px-4 py-2.5 text-sm bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl font-semibold transition-all">
-          <ShoppingCart size={15} /> New Sale
-        </Link>
-      </div>
+      <PageHeader
+        title="Sales"
+        subtitle={`${total} transaction${total !== 1 ? "s" : ""}`}
+        action={
+          <Link href="/dashboard/pos"
+            className="flex items-center gap-2 px-4 py-2.5 text-sm bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl font-semibold transition-all">
+            <ShoppingCart size={15} /> New Sale
+          </Link>
+        }
+      />
 
       <SalesFilters />
 

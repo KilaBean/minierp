@@ -12,16 +12,23 @@ import { RevenueChart, RevenueChartSkeleton } from "@/components/dashboard/Reven
 import { TopProductsChart, TopProductsChartSkeleton } from "@/components/dashboard/TopProductsChart";
 import { RecentSales, RecentSalesSkeleton } from "@/components/dashboard/RecentSales";
 import { LowStockAlert, LowStockAlertSkeleton } from "@/components/dashboard/LowStockAlert";
+import { PageHeader } from "@/components/ui/PageHeader";
 import { createClient } from "@/lib/supabase/server";
 
 async function StatsRow() {
-  const stats = await getDashboardStats();
+  const [stats, trend] = await Promise.all([
+    getDashboardStats(),
+    getSalesTrend(30),
+  ]);
   const supabase = await createClient();
   const { data: profile } = await supabase
     .from("user_profiles")
     .select("businesses(currency)")
     .single() as { data: { businesses: { currency: string } | null } | null };
   const currency = profile?.businesses?.currency ?? "USD";
+
+  const revenueSeries = trend.map((t) => t.revenue);
+  const salesSeries   = trend.map((t) => t.sales);
 
   return (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
@@ -33,6 +40,8 @@ async function StatsRow() {
         icon={DollarSign}
         iconColor="text-sky-400"
         iconBg="bg-sky-500/15"
+        sparkline={revenueSeries}
+        sparklineColor="#0ea5e9"
       />
       <StatCard
         title="Total Expenses"
@@ -58,6 +67,8 @@ async function StatsRow() {
         iconColor="text-amber-400"
         iconBg="bg-amber-500/15"
         suffix=" orders"
+        sparkline={salesSeries}
+        sparklineColor="#f59e0b"
       />
     </div>
   );
@@ -108,24 +119,16 @@ async function BottomRow() {
 export default function DashboardPage() {
   return (
     <div className="space-y-5 max-w-7xl mx-auto">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h2
-            className="text-xl font-bold text-foreground"
-            style={{ fontFamily: "Bricolage Grotesque, sans-serif" }}
-          >
-            Overview
-          </h2>
-          <p className="text-sm text-muted-foreground mt-0.5">
-            {new Date().toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}
-          </p>
-        </div>
-        <div className="flex items-center gap-2 text-xs text-muted-foreground bg-muted border border-border rounded-lg px-3 py-2">
-          <Package size={13} />
-          This month
-        </div>
-      </div>
+      <PageHeader
+        title="Overview"
+        subtitle={new Date().toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}
+        action={
+          <div className="flex items-center gap-2 text-xs text-muted-foreground bg-muted border border-border rounded-lg px-3 py-2">
+            <Package size={13} />
+            This month
+          </div>
+        }
+      />
 
       {/* Stats */}
       <Suspense fallback={

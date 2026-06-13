@@ -13,6 +13,8 @@ import {
 import { Product } from "@/types";
 import { formatCurrency } from "@/lib/utils/index";
 import { cn } from "@/lib/utils";
+import { StatusPill } from "@/components/ui/StatusPill";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { DeleteProductDialog } from "./DeleteProductDialog";
 import { StockAdjustDialog } from "./StockAdjustDialog";
 
@@ -67,7 +69,7 @@ export function ProductTable({ data, total, page, totalPages, currency = "USD", 
       accessorKey: "price",
       header: ({ column }) => <SortButton label="Price" column={column} />,
       cell: ({ row }) => (
-        <span className="text-sm font-medium text-foreground">
+        <span className="text-sm font-medium text-foreground tabular-nums">
           {formatCurrency(row.original.price, currency)}
         </span>
       ),
@@ -104,14 +106,10 @@ export function ProductTable({ data, total, page, totalPages, currency = "USD", 
       accessorKey: "is_active",
       header: "Status",
       cell: ({ row }) => (
-        <span className={cn(
-          "text-xs px-2 py-0.5 rounded-full font-medium",
-          row.original.is_active
-            ? "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400"
-            : "bg-muted text-muted-foreground"
-        )}>
-          {row.original.is_active ? "Active" : "Inactive"}
-        </span>
+        <StatusPill
+          label={row.original.is_active ? "Active" : "Inactive"}
+          tone={row.original.is_active ? "success" : "neutral"}
+        />
       ),
     },
     {
@@ -164,7 +162,7 @@ export function ProductTable({ data, total, page, totalPages, currency = "USD", 
           <table className="w-full">
             <thead>
               {table.getHeaderGroups().map((hg) => (
-                <tr key={hg.id} className="border-b border-border">
+                <tr key={hg.id} className="border-b border-border bg-muted/30">
                   {hg.headers.map((header) => (
                     <th key={header.id} className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                       {flexRender(header.column.columnDef.header, header.getContext())}
@@ -176,9 +174,12 @@ export function ProductTable({ data, total, page, totalPages, currency = "USD", 
             <tbody>
               {table.getRowModel().rows.length === 0 ? (
                 <tr>
-                  <td colSpan={columns.length} className="px-4 py-16 text-center text-muted-foreground text-sm">
-                    <Package size={32} className="mx-auto mb-3 text-muted-foreground/30" />
-                    No products found
+                  <td colSpan={columns.length} className="p-0">
+                    <EmptyState
+                      icon={Package}
+                      title="No products found"
+                      description="Try adjusting your filters, or add a product to get started."
+                    />
                   </td>
                 </tr>
               ) : (

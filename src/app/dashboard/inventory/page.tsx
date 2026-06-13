@@ -6,6 +6,7 @@ import { getCategories } from "@/lib/actions/categories";
 import { ProductTable } from "@/components/inventory/ProductTable";
 import { ProductFilters } from "@/components/inventory/ProductFilters";
 import { ProductTableClient } from "@/components/inventory/ProductTableClient";
+import { PageHeader } from "@/components/ui/PageHeader";
 
 interface PageProps {
   searchParams: Promise<{
@@ -35,27 +36,22 @@ export default async function InventoryPage({ searchParams }: PageProps) {
 
   return (
     <div className="max-w-7xl mx-auto space-y-5">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h2 className="text-xl font-bold text-foreground" style={{ fontFamily: "Bricolage Grotesque, sans-serif" }}>
-            Inventory
-          </h2>
-          <p className="text-sm text-muted-foreground mt-0.5">
-            {total} product{total !== 1 ? "s" : ""} total
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
-          <Link href="/dashboard/inventory/categories"
-            className="flex items-center gap-2 px-4 py-2.5 text-sm border border-border rounded-xl text-muted-foreground hover:text-foreground hover:bg-accent transition-all">
-            <Tag size={15} /> Categories
-          </Link>
-          <Link href="/dashboard/inventory/new"
-            className="flex items-center gap-2 px-4 py-2.5 text-sm bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl font-semibold transition-all">
-            <Plus size={15} /> Add Product
-          </Link>
-        </div>
-      </div>
+      <PageHeader
+        title="Inventory"
+        subtitle={`${total} product${total !== 1 ? "s" : ""} total`}
+        action={
+          <>
+            <Link href="/dashboard/inventory/categories"
+              className="flex items-center gap-2 px-4 py-2.5 text-sm border border-border rounded-xl text-muted-foreground hover:text-foreground hover:bg-accent transition-all">
+              <Tag size={15} /> Categories
+            </Link>
+            <Link href="/dashboard/inventory/new"
+              className="flex items-center gap-2 px-4 py-2.5 text-sm bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl font-semibold transition-all">
+              <Plus size={15} /> Add Product
+            </Link>
+          </>
+        }
+      />
 
       {/* Filters */}
       <ProductFilters categories={categories} />

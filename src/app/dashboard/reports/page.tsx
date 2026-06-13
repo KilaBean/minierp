@@ -8,6 +8,7 @@ import {
 } from "@/lib/actions/reports";
 import { ReportSummaryCards, ReportSummaryCardsSkeleton } from "@/components/reports/ReportSummaryCards";
 import { ReportTabs } from "@/components/reports/ReportTabs";
+import { PageHeader } from "@/components/ui/PageHeader";
 import { createClient } from "@/lib/supabase/server";
 
 async function SummarySection({ currency }: { currency: string }) {
@@ -44,20 +45,15 @@ export default async function ReportsPage() {
 
   return (
     <div className="max-w-7xl mx-auto space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-xl font-bold text-foreground" style={{ fontFamily: "Bricolage Grotesque, sans-serif" }}>
-            Reports & Analytics
-          </h2>
-          <p className="text-sm text-muted-foreground mt-0.5">
-            Business performance insights
-          </p>
-        </div>
-        <div className="text-xs text-muted-foreground bg-muted border border-border rounded-lg px-3 py-2">
-          Last updated: {new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}
-        </div>
-      </div>
+      <PageHeader
+        title="Reports & Analytics"
+        subtitle="Business performance insights"
+        action={
+          <div className="text-xs text-muted-foreground bg-muted border border-border rounded-lg px-3 py-2">
+            Last updated: {new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}
+          </div>
+        }
+      />
 
       {/* Summary cards */}
       <Suspense fallback={<ReportSummaryCardsSkeleton />}>

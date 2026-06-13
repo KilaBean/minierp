@@ -5,6 +5,7 @@ import { getBusinessSettings, getTeamMembers } from "@/lib/actions/settings";
 import { BusinessProfileForm } from "@/components/settings/BusinessProfileForm";
 import { TeamMembers } from "@/components/settings/TeamMembers";
 import { AddMemberDialog } from "@/components/settings/AddMemberDialog";
+import { PageHeader } from "@/components/ui/PageHeader";
 
 export default async function SettingsPage() {
   // Step 1: verify the user is authenticated
@@ -33,35 +34,32 @@ export default async function SettingsPage() {
   if (!business) redirect("/dashboard");
 
   return (
-    <div className="max-w-3xl mx-auto space-y-6">
-      <div>
-        <h2
-          className="text-xl font-bold text-foreground"
-          style={{ fontFamily: "Bricolage Grotesque, sans-serif" }}
-        >
-          Settings
-        </h2>
-        <p className="text-sm text-muted-foreground mt-0.5">
-          Manage your business profile and team
-        </p>
-      </div>
+    <div className="max-w-3xl mx-auto space-y-8">
+      <PageHeader
+        title="Settings"
+        subtitle="Manage your business profile and team"
+      />
 
-      <BusinessProfileForm business={business} />
-
-      <div className="flex items-center justify-between">
+      <section className="space-y-3">
         <div>
-          <h3 className="text-base font-semibold text-foreground">
-            Team Members
-          </h3>
-          <p className="text-xs text-muted-foreground mt-0.5">
-            {members.length} member{members.length !== 1 ? "s" : ""} in your
-            business
-          </p>
+          <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide">Business profile</h3>
+          <p className="text-xs text-muted-foreground mt-0.5">Name, currency, and tax settings used across the app.</p>
         </div>
-        <AddMemberDialog />
-      </div>
+        <BusinessProfileForm business={business} />
+      </section>
 
-      <TeamMembers members={members as any} />
+      <section className="space-y-3">
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide">Team members</h3>
+            <p className="text-xs text-muted-foreground mt-0.5">
+              {members.length} member{members.length !== 1 ? "s" : ""} in your business
+            </p>
+          </div>
+          <AddMemberDialog />
+        </div>
+        <TeamMembers members={members as any} />
+      </section>
     </div>
   );
 }

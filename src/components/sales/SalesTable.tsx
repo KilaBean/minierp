@@ -1,16 +1,16 @@
 "use client";
 
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
-import Link from "next/link";
-import { ChevronLeft, ChevronRight, Eye, ShoppingCart } from "lucide-react";
+import { ChevronLeft, ChevronRight, ShoppingCart } from "lucide-react";
 import { formatCurrency, formatDateTime } from "@/lib/utils/index";
-import { cn } from "@/lib/utils";
+import { StatusPill, PillTone } from "@/components/ui/StatusPill";
+import { EmptyState } from "@/components/ui/EmptyState";
 
-const statusColors: Record<string, string> = {
-  completed: "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400",
-  pending:   "bg-amber-500/15 text-amber-600 dark:text-amber-400",
-  cancelled: "bg-red-500/15 text-red-500",
-  refunded:  "bg-muted text-muted-foreground",
+const statusTones: Record<string, PillTone> = {
+  completed: "success",
+  pending:   "warning",
+  cancelled: "danger",
+  refunded:  "neutral",
 };
 
 const paymentLabels: Record<string, string> = {
@@ -36,42 +36,43 @@ export function SalesTable({ data, total, page, totalPages, currency = "USD" }: 
     router.push(`${pathname}?${sp.toString()}`);
   }
 
+  if (data.length === 0) {
+    return (
+      <div className="bg-card border border-border rounded-2xl">
+        <EmptyState
+          icon={ShoppingCart}
+          title="No sales found"
+          description="Sales you record at the point of sale will appear here."
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="bg-card border border-border rounded-2xl overflow-hidden">
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead>
-            <tr className="border-b border-border">
-              {["Sale #","Customer","Items","Payment","Total","Status","Date",""].map((h) => (
-                <th key={h} className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">{h}</th>
+            <tr className="border-b border-border bg-muted/30">
+              {["Sale #","Customer","Items","Payment","Total","Status","Date"].map((h, i) => (
+                <th key={h} className={`px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider ${i === 4 ? "text-right" : "text-left"}`}>{h}</th>
               ))}
             </tr>
           </thead>
           <tbody>
-            {data.length === 0 ? (
-              <tr><td colSpan={8} className="px-4 py-16 text-center">
-                <ShoppingCart size={32} className="mx-auto mb-3 text-muted-foreground/30" />
-                <p className="text-sm text-muted-foreground">No sales found</p>
-              </td></tr>
-            ) : data.map((sale) => (
-              <tr key={sale.id} className="border-b border-border last:border-0 hover:bg-muted/30 transition-colors">
+            {data.map((sale) => (
+              <tr key={sale.id}
+                onClick={() => router.push(`/dashboard/sales/${sale.id}`)}
+                className="border-b border-border last:border-0 hover:bg-muted/30 transition-colors cursor-pointer">
                 <td className="px-4 py-3 text-sm font-mono font-medium text-foreground">{sale.sale_number}</td>
                 <td className="px-4 py-3 text-sm text-foreground">{sale.customers?.name ?? <span className="text-muted-foreground">Walk-in</span>}</td>
-                <td className="px-4 py-3 text-sm text-muted-foreground">{sale.sale_items?.length ?? "—"}</td>
+                <td className="px-4 py-3 text-sm text-muted-foreground tabular-nums">{sale.sale_items?.length ?? "—"}</td>
                 <td className="px-4 py-3 text-sm text-muted-foreground capitalize">{paymentLabels[sale.payment_method] ?? sale.payment_method}</td>
-                <td className="px-4 py-3 text-sm font-semibold text-foreground">{formatCurrency(sale.total_amount, currency)}</td>
+                <td className="px-4 py-3 text-sm font-semibold text-foreground text-right tabular-nums">{formatCurrency(sale.total_amount, currency)}</td>
                 <td className="px-4 py-3">
-                  <span className={cn("text-xs px-2 py-0.5 rounded-full capitalize font-medium", statusColors[sale.status] ?? statusColors.completed)}>
-                    {sale.status}
-                  </span>
+                  <StatusPill label={sale.status} tone={statusTones[sale.status] ?? "success"} />
                 </td>
                 <td className="px-4 py-3 text-sm text-muted-foreground whitespace-nowrap">{formatDateTime(sale.created_at)}</td>
-                <td className="px-4 py-3">
-                  <Link href={`/dashboard/sales/${sale.id}`}
-                    className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent transition-all inline-flex">
-                    <Eye size={15} />
-                  </Link>
-                </td>
               </tr>
             ))}
           </tbody>

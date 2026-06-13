@@ -1,6 +1,7 @@
 import { TrendingUp, TrendingDown, Minus, LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatCurrency } from "@/lib/utils/index";
+import { Sparkline } from "@/components/ui/Sparkline";
 
 interface StatCardProps {
   title: string;
@@ -13,12 +14,16 @@ interface StatCardProps {
   prefix?: string;
   suffix?: string;
   currency?: string;
+  /** Optional trend series for an inline sparkline. */
+  sparkline?: number[];
+  /** Sparkline stroke color (defaults to ocean blue). */
+  sparklineColor?: string;
 }
 
 export function StatCard({
   title, value, change, isCurrency = false,
   icon: Icon, iconColor, iconBg, prefix = "", suffix = "",
-  currency = "USD",
+  currency = "USD", sparkline, sparklineColor,
 }: StatCardProps) {
   const isPositive = (change ?? 0) > 0;
   const isNeutral  = (change ?? 0) === 0;
@@ -39,15 +44,20 @@ export function StatCard({
       <div className="text-2xl font-bold text-foreground mb-2" style={{ fontFamily: "Bricolage Grotesque, sans-serif" }}>
         {displayValue}
       </div>
-      {change !== undefined && (
-        <div className={cn(
-          "flex items-center gap-1 text-xs font-medium",
-          isPositive ? "text-emerald-500" : isNeutral ? "text-muted-foreground" : "text-red-500"
-        )}>
-          <TrendIcon size={13} />
-          <span>{isNeutral ? "No change" : `${Math.abs(change).toFixed(1)}% vs last month`}</span>
-        </div>
-      )}
+      <div className="flex items-end justify-between gap-2">
+        {change !== undefined ? (
+          <div className={cn(
+            "flex items-center gap-1 text-xs font-medium",
+            isPositive ? "text-emerald-500" : isNeutral ? "text-muted-foreground" : "text-red-500"
+          )}>
+            <TrendIcon size={13} />
+            <span>{isNeutral ? "No change" : `${Math.abs(change).toFixed(1)}% vs last month`}</span>
+          </div>
+        ) : <span />}
+        {sparkline && sparkline.length > 1 && (
+          <Sparkline data={sparkline} color={sparklineColor} className="opacity-90" />
+        )}
+      </div>
     </div>
   );
 }
