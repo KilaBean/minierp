@@ -5,14 +5,45 @@ import { createClient } from "@/lib/supabase/server";
 import { customerSchema } from "@/lib/validations";
 import { ApiResponse, Customer, PaginatedResponse } from "@/types";
 
-export async function getCustomers(search = "", page = 1, perPage = 20): Promise<PaginatedResponse<Customer>> {
+export type CustomerSort = "name" | "total_purchases" | "created_at";
+const CUSTOMER_SORT_COLUMNS: CustomerSort[] = ["name", "total_purchases", "created_at"];
+
+export async function getCustomers(
+  search = "",
+  page = 1,
+  perPage = 20,
+  sort: CustomerSort = "name",
+  dir: "asc" | "desc" = "asc",
+): Promise<PaginatedResponse<Customer>> {
   const supabase = await createClient();
-  let query = supabase.from("customers").select("*", { count: "exact" }).order("name");
+  const sortCol = CUSTOMER_SORT_COLUMNS.includes(sort) ? sort : "name";
+  let query = supabase
+    .from("customers")
+    .select("*", { count: "exact" })
+    .order(sortCol, { ascending: dir === "asc" });
   if (search) query = query.ilike("name", `%${search}%`);
   const from = (page - 1) * perPage;
   const { data, count, error } = await query.range(from, from + perPage - 1);
   if (error) return { data: [], total: 0, page, per_page: perPage, total_pages: 0 };
   return { data: (data ?? []) as Customer[], total: count ?? 0, page, per_page: perPage, total_pages: Math.ceil((count ?? 0) / perPage) };
+}
+
+/** Aggregate metrics for the customers page header strip. */
+export async function getCustomerStats(): Promise<{ total: number; lifetimeValue: number; newThisMonth: number }> {
+  const supabase = await createClient();
+  const db = supabase as any;
+  const startOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString();
+
+  const [{ data: spend }, { count: total }, { count: newThisMonth }] = await Promise.all([
+    db.from("customers").select("total_purchases"),
+    db.from("customers").select("id", { count: "exact", head: true }),
+    db.from("customers").select("id", { count: "exact", head: true }).gte("created_at", startOfMonth),
+  ]);
+
+  const lifetimeValue = ((spend ?? []) as { total_purchases: number }[])
+    .reduce((s, r) => s + Number(r.total_purchases ?? 0), 0);
+
+  return { total: total ?? 0, lifetimeValue, newThisMonth: newThisMonth ?? 0 };
 }
 
 export async function getCustomer(id: string): Promise<Customer | null> {

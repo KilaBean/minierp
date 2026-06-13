@@ -108,16 +108,22 @@ export async function createSale(
   return { data: { id: saleId, sale_number: saleNumber }, error: null, success: true };
 }
 
+export type SaleSort = "created_at" | "total_amount";
+const SALE_SORT_COLUMNS: SaleSort[] = ["created_at", "total_amount"];
+
 export async function getSales(
   filters: SaleFilters = {},
   page = 1,
-  perPage = 20
+  perPage = 20,
+  sort: SaleSort = "created_at",
+  dir: "asc" | "desc" = "desc"
 ): Promise<PaginatedResponse<Sale>> {
   const supabase = await createClient();
+  const sortCol = SALE_SORT_COLUMNS.includes(sort) ? sort : "created_at";
   let query = (supabase as any)
     .from("sales")
     .select("*, customers(id, name)", { count: "exact" })
-    .order("created_at", { ascending: false });
+    .order(sortCol, { ascending: dir === "asc" });
 
   if (filters.search)         query = query.ilike("sale_number", `%${filters.search}%`);
   if (filters.status)         query = query.eq("status", filters.status);

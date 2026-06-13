@@ -1,18 +1,25 @@
 "use client";
 
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
-import { ChevronLeft, ChevronRight, Users } from "lucide-react";
+import { ChevronLeft, ChevronRight, Users, ArrowUp, ArrowDown, ArrowUpDown } from "lucide-react";
 import { formatCurrency, formatDate } from "@/lib/utils/index";
 import { Customer } from "@/types";
 import { StatusPill } from "@/components/ui/StatusPill";
 import { EmptyState } from "@/components/ui/EmptyState";
 
-interface Props { data: Customer[]; total: number; page: number; totalPages: number; }
+type Sort = "name" | "total_purchases" | "created_at";
+interface Props { data: Customer[]; total: number; page: number; totalPages: number; sort: Sort; dir: "asc" | "desc"; }
 
-export function CustomersTable({ data, total, page, totalPages }: Props) {
+export function CustomersTable({ data, total, page, totalPages, sort, dir }: Props) {
   const router = useRouter(); const pathname = usePathname(); const params = useSearchParams();
   function changePage(p: number) {
     const sp = new URLSearchParams(params.toString()); sp.set("page", String(p));
+    router.push(`${pathname}?${sp.toString()}`);
+  }
+  function toggleSort(col: Sort) {
+    const sp = new URLSearchParams(params.toString());
+    const nextDir = sort === col && dir === "asc" ? "desc" : "asc";
+    sp.set("sort", col); sp.set("dir", nextDir); sp.delete("page");
     router.push(`${pathname}?${sp.toString()}`);
   }
 
@@ -28,14 +35,27 @@ export function CustomersTable({ data, total, page, totalPages }: Props) {
     );
   }
 
+  const SortIcon = ({ col }: { col: Sort }) =>
+    sort !== col ? <ArrowUpDown size={12} className="opacity-40" />
+      : dir === "asc" ? <ArrowUp size={12} /> : <ArrowDown size={12} />;
+
   return (
     <div className="bg-card border border-border rounded-2xl overflow-hidden">
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead><tr className="border-b border-border bg-muted/30">
-            {["Customer","Status","Email","Phone","Total Spent","Since"].map((h, i) => (
-              <th key={h} className={`px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider ${i === 4 ? "text-right" : "text-left"}`}>{h}</th>
-            ))}
+            <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+              <button onClick={() => toggleSort("name")} className="flex items-center gap-1 hover:text-foreground transition-colors">Customer <SortIcon col="name" /></button>
+            </th>
+            <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">Status</th>
+            <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">Email</th>
+            <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">Phone</th>
+            <th className="px-4 py-3 text-right text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+              <button onClick={() => toggleSort("total_purchases")} className="flex items-center gap-1 ml-auto hover:text-foreground transition-colors">Total Spent <SortIcon col="total_purchases" /></button>
+            </th>
+            <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+              <button onClick={() => toggleSort("created_at")} className="flex items-center gap-1 hover:text-foreground transition-colors">Since <SortIcon col="created_at" /></button>
+            </th>
           </tr></thead>
           <tbody>
             {data.map((c) => (

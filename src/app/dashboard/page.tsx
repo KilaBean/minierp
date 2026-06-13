@@ -1,12 +1,13 @@
 import { Suspense } from "react";
 import {
-  DollarSign, TrendingUp, ShoppingCart,
-  Receipt, Package,
+  DollarSign, TrendingUp, ShoppingCart, Receipt,
 } from "lucide-react";
 import {
   getDashboardStats, getSalesTrend,
   getTopProducts, getRecentSales, getLowStockProducts,
 } from "@/lib/actions/dashboard";
+import { rangeTrendDays, type DashboardRange } from "@/lib/dashboard-range";
+import { DateRangeTabs } from "@/components/dashboard/DateRangeTabs";
 import { StatCard, StatCardSkeleton } from "@/components/dashboard/StatCard";
 import { RevenueChart, RevenueChartSkeleton } from "@/components/dashboard/RevenueChart";
 import { TopProductsChart, TopProductsChartSkeleton } from "@/components/dashboard/TopProductsChart";
@@ -15,10 +16,10 @@ import { LowStockAlert, LowStockAlertSkeleton } from "@/components/dashboard/Low
 import { PageHeader } from "@/components/ui/PageHeader";
 import { createClient } from "@/lib/supabase/server";
 
-async function StatsRow() {
+async function StatsRow({ range }: { range: DashboardRange }) {
   const [stats, trend] = await Promise.all([
-    getDashboardStats(),
-    getSalesTrend(30),
+    getDashboardStats(range),
+    getSalesTrend(rangeTrendDays(range)),
   ]);
   const supabase = await createClient();
   const { data: profile } = await supabase
@@ -74,9 +75,9 @@ async function StatsRow() {
   );
 }
 
-async function ChartsRow() {
+async function ChartsRow({ range }: { range: DashboardRange }) {
   const [trend, topProducts] = await Promise.all([
-    getSalesTrend(30),
+    getSalesTrend(rangeTrendDays(range)),
     getTopProducts(5),
   ]);
   const supabase = await createClient();
@@ -116,37 +117,37 @@ async function BottomRow() {
   );
 }
 
-export default function DashboardPage() {
+const VALID_RANGES: DashboardRange[] = ["today", "7d", "30d", "month"];
+
+export default async function DashboardPage({ searchParams }: { searchParams: Promise<{ range?: string }> }) {
+  const sp    = await searchParams;
+  const range = (VALID_RANGES.includes(sp.range as DashboardRange) ? sp.range : "month") as DashboardRange;
+
   return (
     <div className="space-y-5 max-w-7xl mx-auto">
       <PageHeader
         title="Overview"
         subtitle={new Date().toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}
-        action={
-          <div className="flex items-center gap-2 text-xs text-muted-foreground bg-muted border border-border rounded-lg px-3 py-2">
-            <Package size={13} />
-            This month
-          </div>
-        }
+        action={<DateRangeTabs value={range} />}
       />
 
       {/* Stats */}
-      <Suspense fallback={
+      <Suspense key={`stats-${range}`} fallback={
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {Array.from({ length: 4 }).map((_, i) => <StatCardSkeleton key={i} />)}
         </div>
       }>
-        <StatsRow />
+        <StatsRow range={range} />
       </Suspense>
 
       {/* Charts */}
-      <Suspense fallback={
+      <Suspense key={`charts-${range}`} fallback={
         <div className="grid lg:grid-cols-2 gap-4">
           <RevenueChartSkeleton />
           <TopProductsChartSkeleton />
         </div>
       }>
-        <ChartsRow />
+        <ChartsRow range={range} />
       </Suspense>
 
       {/* Bottom row */}

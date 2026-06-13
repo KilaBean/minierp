@@ -2,22 +2,24 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { DashboardStats, SalesTrend, TopProduct } from "@/types";
+import { rangeWindow, type DashboardRange } from "@/lib/dashboard-range";
 
-export async function getDashboardStats(): Promise<DashboardStats> {
+export async function getDashboardStats(range: DashboardRange = "month"): Promise<DashboardStats> {
   const supabase = await createClient();
   const db = supabase as any;
 
-  const now = new Date();
-  const startOfMonth     = new Date(now.getFullYear(), now.getMonth(),     1).toISOString();
-  const startOfLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1).toISOString();
-  const endOfLastMonth   = new Date(now.getFullYear(), now.getMonth(),     0).toISOString();
+  const { curStart, curEnd, prevStart, prevEnd } = rangeWindow(range);
+  const curStartISO  = curStart.toISOString();
+  const curEndISO    = curEnd.toISOString();
+  const prevStartISO = prevStart.toISOString();
+  const prevEndISO   = prevEnd.toISOString();
 
   const [{ data: currentSales }, { data: lastSales }, { data: currentExpenses }, { data: lastExpenses }] =
     await Promise.all([
-      db.from("sales").select("total_amount").gte("created_at", startOfMonth).eq("status", "completed"),
-      db.from("sales").select("total_amount").gte("created_at", startOfLastMonth).lte("created_at", endOfLastMonth).eq("status", "completed"),
-      db.from("expenses").select("amount").gte("date", startOfMonth.split("T")[0]),
-      db.from("expenses").select("amount").gte("date", startOfLastMonth.split("T")[0]).lte("date", endOfLastMonth.split("T")[0]),
+      db.from("sales").select("total_amount").gte("created_at", curStartISO).lte("created_at", curEndISO).eq("status", "completed"),
+      db.from("sales").select("total_amount").gte("created_at", prevStartISO).lte("created_at", prevEndISO).eq("status", "completed"),
+      db.from("expenses").select("amount").gte("date", curStartISO.split("T")[0]).lte("date", curEndISO.split("T")[0]),
+      db.from("expenses").select("amount").gte("date", prevStartISO.split("T")[0]).lte("date", prevEndISO.split("T")[0]),
     ]);
 
   const totalRevenue   = ((currentSales   ?? []) as { total_amount: number }[]).reduce((s, r) => s + Number(r.total_amount), 0);

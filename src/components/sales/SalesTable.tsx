@@ -1,10 +1,12 @@
 "use client";
 
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
-import { ChevronLeft, ChevronRight, ShoppingCart } from "lucide-react";
+import { ChevronLeft, ChevronRight, ShoppingCart, ArrowUp, ArrowDown, ArrowUpDown } from "lucide-react";
 import { formatCurrency, formatDateTime } from "@/lib/utils/index";
 import { StatusPill, PillTone } from "@/components/ui/StatusPill";
 import { EmptyState } from "@/components/ui/EmptyState";
+
+type Sort = "created_at" | "total_amount";
 
 const statusTones: Record<string, PillTone> = {
   completed: "success",
@@ -23,9 +25,11 @@ interface Props {
   page: number;
   totalPages: number;
   currency?: string;
+  sort: Sort;
+  dir: "asc" | "desc";
 }
 
-export function SalesTable({ data, total, page, totalPages, currency = "USD" }: Props) {
+export function SalesTable({ data, total, page, totalPages, currency = "USD", sort, dir }: Props) {
   const router   = useRouter();
   const pathname = usePathname();
   const params   = useSearchParams();
@@ -35,6 +39,15 @@ export function SalesTable({ data, total, page, totalPages, currency = "USD" }: 
     sp.set("page", String(p));
     router.push(`${pathname}?${sp.toString()}`);
   }
+  function toggleSort(col: Sort) {
+    const sp = new URLSearchParams(params.toString());
+    const nextDir = sort === col && dir === "desc" ? "asc" : "desc";
+    sp.set("sort", col); sp.set("dir", nextDir); sp.delete("page");
+    router.push(`${pathname}?${sp.toString()}`);
+  }
+  const SortIcon = ({ col }: { col: Sort }) =>
+    sort !== col ? <ArrowUpDown size={12} className="opacity-40" />
+      : dir === "asc" ? <ArrowUp size={12} /> : <ArrowDown size={12} />;
 
   if (data.length === 0) {
     return (
@@ -54,9 +67,16 @@ export function SalesTable({ data, total, page, totalPages, currency = "USD" }: 
         <table className="w-full">
           <thead>
             <tr className="border-b border-border bg-muted/30">
-              {["Sale #","Customer","Items","Payment","Total","Status","Date"].map((h, i) => (
-                <th key={h} className={`px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider ${i === 4 ? "text-right" : "text-left"}`}>{h}</th>
+              {["Sale #","Customer","Items","Payment"].map((h) => (
+                <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">{h}</th>
               ))}
+              <th className="px-4 py-3 text-right text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                <button onClick={() => toggleSort("total_amount")} className="flex items-center gap-1 ml-auto hover:text-foreground transition-colors">Total <SortIcon col="total_amount" /></button>
+              </th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">Status</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                <button onClick={() => toggleSort("created_at")} className="flex items-center gap-1 hover:text-foreground transition-colors">Date <SortIcon col="created_at" /></button>
+              </th>
             </tr>
           </thead>
           <tbody>
