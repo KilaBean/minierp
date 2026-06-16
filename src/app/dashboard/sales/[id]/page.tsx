@@ -1,11 +1,12 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Printer, XCircle } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { getSale } from "@/lib/actions/sales";
 import { createClient } from "@/lib/supabase/server";
 import { formatCurrency, formatDateTime } from "@/lib/utils/index";
 import { cn } from "@/lib/utils";
 import { VoidSaleButton } from "@/components/sales/VoidSaleButton";
+import { SalePrintButtons } from "@/components/sales/SalePrintButtons";
 
 interface Props { params: Promise<{ id: string }> }
 
@@ -22,8 +23,9 @@ export default async function SaleDetailPage({ params }: Props) {
   if (!sale) notFound();
 
   const supabase = await createClient();
-  const { data: profile } = await supabase.from("user_profiles").select("businesses(currency)").single() as any;
-  const currency = profile?.businesses?.currency ?? "USD";
+  const { data: profile } = await supabase.from("user_profiles").select("businesses(name, currency)").single() as any;
+  const currency     = profile?.businesses?.currency ?? "USD";
+  const businessName = profile?.businesses?.name ?? "My Business";
 
   return (
     <div className="max-w-3xl mx-auto space-y-5">
@@ -33,6 +35,7 @@ export default async function SaleDetailPage({ params }: Props) {
           <ArrowLeft size={14} /> Back to sales
         </Link>
         <div className="flex items-center gap-2">
+          <SalePrintButtons sale={sale} businessName={businessName} currency={currency} />
           {sale.status === "completed" && <VoidSaleButton saleId={id} />}
         </div>
       </div>
