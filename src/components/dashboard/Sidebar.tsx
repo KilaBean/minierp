@@ -2,10 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Package, ShoppingCart, Users, Receipt, BarChart3, Settings, Zap, LogOut, PanelLeftClose, PanelLeftOpen, ClipboardList, X } from "lucide-react";
+import { LayoutDashboard, Package, ShoppingCart, Users, Receipt, BarChart3, Settings, Zap, ClipboardList, X, PanelLeftClose, PanelLeftOpen } from "lucide-react";
 import { useUIStore } from "@/store/useUIStore";
 import { useAuthStore } from "@/store/useAuthStore";
-import { signOut } from "@/lib/actions/auth";
 import { cn } from "@/lib/utils";
 import { UserRole } from "@/types";
 
@@ -57,13 +56,25 @@ export function Sidebar() {
         <div className={cn("flex items-center h-16 px-4 border-b border-sidebar-border flex-shrink-0 gap-3", sidebarCollapsed && "md:justify-center md:gap-0")}>
           <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-sky-500 to-blue-600 flex items-center justify-center flex-shrink-0"><Zap size={15} className="text-white" /></div>
           <span className={cn("text-base font-bold text-sidebar-foreground truncate", sidebarCollapsed && "md:hidden")} style={{ fontFamily: "Bricolage Grotesque, sans-serif" }}>MiniERP</span>
-          {/* Mobile-only collapse/close button */}
+          {/* Mobile-only close button */}
           <button
             onClick={closeMobile}
-            aria-label="Collapse menu"
+            aria-label="Close menu"
             className="md:hidden ml-auto p-1.5 rounded-lg text-sidebar-foreground/50 hover:text-sidebar-foreground hover:bg-sidebar-accent transition-all"
           >
             <X size={18} />
+          </button>
+          {/* Desktop-only collapse button (shown when expanded) */}
+          <button
+            onClick={toggleSidebar}
+            aria-label="Collapse sidebar"
+            title="Collapse sidebar"
+            className={cn(
+              "hidden md:flex ml-auto p-1.5 rounded-lg text-sidebar-foreground/40 hover:text-sidebar-foreground hover:bg-sidebar-accent transition-all",
+              sidebarCollapsed && "md:hidden",
+            )}
+          >
+            <PanelLeftClose size={17} />
           </button>
         </div>
         <nav className="flex-1 overflow-y-auto py-4 px-2 space-y-0.5">
@@ -80,29 +91,25 @@ export function Sidebar() {
             );
           })}
         </nav>
-        <div className="border-t border-sidebar-border p-2 space-y-1 flex-shrink-0">
-          {user && (
+        {user && (
+          <div className="border-t border-sidebar-border p-2 flex-shrink-0">
             <div className={cn("px-3 py-2", sidebarCollapsed && "md:hidden")}>
               <div className="text-xs font-medium text-sidebar-foreground/70 truncate">{user.full_name ?? user.email}</div>
               <span className={cn("inline-block text-xs px-1.5 py-0.5 rounded-full capitalize font-medium mt-0.5", role === "admin" && "bg-sky-500/20 text-sky-600 dark:text-sky-300", role === "manager" && "bg-emerald-500/20 text-emerald-600 dark:text-emerald-300", role === "cashier" && "bg-amber-500/20 text-amber-600 dark:text-amber-300")}>{role}</span>
             </div>
-          )}
-          <form action={signOut}>
-            <button type="submit" title={sidebarCollapsed ? "Sign out" : undefined} className={cn("w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-sidebar-foreground/40 hover:text-sidebar-foreground hover:bg-sidebar-accent transition-all", sidebarCollapsed && "md:justify-center")}>
-              <LogOut size={16} className="flex-shrink-0" /><span className={cn(sidebarCollapsed && "md:hidden")}>Sign out</span>
-            </button>
-          </form>
-          {/* Collapse toggle — desktop only (mobile uses the drawer) */}
-          <button onClick={toggleSidebar} title={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"} className={cn("hidden md:flex w-full items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-sidebar-foreground/30 hover:text-sidebar-foreground/70 hover:bg-sidebar-accent transition-all", sidebarCollapsed && "md:justify-center")}>
-            {sidebarCollapsed ? <PanelLeftOpen size={16} className="flex-shrink-0" /> : <><PanelLeftClose size={16} className="flex-shrink-0" /><span>Collapse</span></>}
-          </button>
-        </div>
+          </div>
+        )}
       </aside>
 
       {/* Desktop-only edge handle to expand a collapsed sidebar */}
       {sidebarCollapsed && (
-        <button onClick={toggleSidebar} title="Expand sidebar" className="hidden md:flex fixed left-16 top-1/2 -translate-y-1/2 z-50 w-4 h-10 bg-sidebar border border-sidebar-border border-l-0 rounded-r-lg items-center justify-center text-sidebar-foreground/30 hover:text-sidebar-foreground/70 transition-all">
-          <PanelLeftOpen size={11} />
+        <button
+          onClick={toggleSidebar}
+          aria-label="Expand sidebar"
+          title="Expand sidebar"
+          className="hidden md:flex fixed left-16 top-1/2 -translate-y-1/2 z-50 w-5 h-12 bg-sidebar border border-sidebar-border border-l-0 rounded-r-lg items-center justify-center text-sidebar-foreground/40 hover:text-sidebar-foreground hover:bg-sidebar-accent transition-all"
+        >
+          <PanelLeftOpen size={13} />
         </button>
       )}
     </>
