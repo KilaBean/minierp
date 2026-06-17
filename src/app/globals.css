@@ -77,6 +77,11 @@
 
 @layer base {
   * { @apply border-border; }
+  /* Always reserve the scrollbar gutter so fixed elements (TopBar) don't shift
+     horizontally when navigating between short and tall pages. */
+  html {
+    scrollbar-gutter: stable;
+  }
   body {
     @apply bg-background text-foreground;
     font-family: "DM Sans", system-ui, sans-serif;
